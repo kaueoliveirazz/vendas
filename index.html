@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Vendas Shopee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6H4C2.89543 6 2 6.89543 2 8V20C2 21.1046 2.89543 22 4 22H20C21.1046 22 22 21.1046 22 20V8C22 6.89543 21.1046 6 20 6Z" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 10V8C16 5.79086 14.2091 4 12 4C9.79086 4 8 5.79086 8 8V10" stroke="url(#paint0_linear)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                        <linearGradient id="paint0_linear" x1="2" y1="4" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#FF6633" />
+                            <stop offset="1" stop-color="#E63900" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <h1>Shopee Sales<span class="highlight">Tracker</span></h1>
+            </div>
+            <div class="header-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Vendas do Dia</span>
+                    <span class="stat-value" id="today-count">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Receita do Dia</span>
+                    <span class="stat-value highlight" id="today-revenue">R$ 0,00</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="nova-venda">Nova Venda</button>
+                <button class="tab-btn" data-tab="historico">Diário</button>
+                <button class="tab-btn" data-tab="despesas">Despesas</button>
+                <button class="tab-btn" data-tab="resumo-mensal">Fechamento Mensal</button>
+                <button class="tab-btn" data-tab="anotacoes">Anotações</button>
+            </div>
+
+            <section id="nova-venda" class="tab-content active">
+                <div class="card glass">
+                    <h2>Registrar Venda</h2>
+                    <p class="subtitle">Adicione os detalhes do pedido vendido.</p>
+                    
+                    <form id="sale-form">
+                        <div class="form-group">
+                            <label for="size">Tamanho da Camisa</label>
+                            <div class="size-selector" id="size-selector">
+                                <label><input type="radio" name="size" value="PP"><span>PP</span></label>
+                                <label><input type="radio" name="size" value="P"><span>P</span></label>
+                                <label><input type="radio" name="size" value="M" checked><span>M</span></label>
+                                <label><input type="radio" name="size" value="G"><span>G</span></label>
+                                <label><input type="radio" name="size" value="GG"><span>GG</span></label>
+                                <label><input type="radio" name="size" value="XG"><span>XG</span></label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="color">Cor da Camisa</label>
+                                <input type="text" id="color" name="color" placeholder="Ex: Preta, Branca, Azul..." required autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="print">Estampa / Modelo</label>
+                                <input type="text" id="print" name="print" placeholder="Ex: Anime, Lisa, Logo..." required autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">Valor da Venda (R$)</label>
+                                <div class="input-with-icon">
+                                    <span>R$</span>
+                                    <input type="number" id="price" name="price" step="0.01" min="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sale-date">Data da Venda</label>
+                                <input type="date" id="sale-date" name="sale-date" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            <span>Registrar Venda</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="historico" class="tab-content">
+                <div class="card glass">
+                    <div class="history-header">
+                        <h2>Vendas do Dia</h2>
+                        <div class="date-picker-container">
+                            <label for="history-date">Data:</label>
+                            <input type="date" id="history-date">
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="sales-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Tamanho</th>
+                                    <th>Cor</th>
+                                    <th>Estampa</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-list">
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="empty-state" class="empty-state hidden">
+                        <p>Nenhuma venda registrada neste dia.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="despesas" class="tab-content">
+                <div class="card glass">
+                    <h2>Registrar Despesa</h2>
+                    <form id="expense-form">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 2;">
+                                <label for="expense-desc">Descrição</label>
+                                <input type="text" id="expense-desc" name="expense-desc" placeholder="Ex: Fornecedor, Embalagens, Anúncios..." required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expense-price">Valor (R$)</label>
+                                <div class="input-with-icon">
+                                    <span>R$</span>
+                                    <input type="number" id="expense-price" name="expense-price" step="0.01" min="0.01" placeholder="0.00" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="expense-date">Data da Despesa</label>
+                                <input type="date" id="expense-date" name="expense-date" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-danger">Registrar Despesa</button>
+                    </form>
+
+                    <div class="history-header" style="margin-top: 2rem;">
+                        <h3>Histórico de Despesas (Dia selecionado)</h3>
+                    </div>
+                    <div class="table-container">
+                        <table id="expenses-table">
+                            <thead>
+                                <tr>
+                                    <th>Descrição</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenses-list">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="resumo-mensal" class="tab-content">
+                <div class="card glass">
+                    <div class="history-header">
+                        <h2>Fechamento do Mês</h2>
+                        <div class="date-picker-container">
+                            <label for="month-picker">Mês:</label>
+                            <input type="month" id="month-picker">
+                        </div>
+                    </div>
+                    
+                    <div class="monthly-stats">
+                        <div class="monthly-card success">
+                            <h4>Receita Bruta</h4>
+                            <p id="monthly-revenue">R$ 0,00</p>
+                            <span id="monthly-sales-count">0 vendas</span>
+                        </div>
+                        <div class="monthly-card danger">
+                            <h4>Despesas</h4>
+                            <p id="monthly-expenses">R$ 0,00</p>
+                        </div>
+                        <div class="monthly-card net-profit" id="monthly-profit-card">
+                            <h4>Lucro Líquido</h4>
+                            <p id="monthly-profit">R$ 0,00</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="anotacoes" class="tab-content">
+                <div class="card glass" style="height: 100%;">
+                    <h2>Anotações</h2>
+                    <p class="subtitle">Faça rascunhos ou anote ideias (salvamento automático).</p>
+                    <textarea id="notes-area" class="notes-textarea" placeholder="Digite suas anotações aqui..."></textarea>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Toast Notification -->
+        <div id="toast" class="toast">Ação realizada!</div>
+
+        <!-- Calculadora Floating Widget -->
+        <div class="calculator-widget" id="calculator-widget">
+            <button class="calc-toggle-btn" id="calc-toggle-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="14.01"></line><line x1="12" y1="14" x2="12" y2="14.01"></line><line x1="8" y1="14" x2="8" y2="14.01"></line><line x1="16" y1="10" x2="16" y2="10.01"></line><line x1="12" y1="10" x2="12" y2="10.01"></line><line x1="8" y1="10" x2="8" y2="10.01"></line><line x1="16" y1="18" x2="16" y2="18.01"></line><line x1="12" y1="18" x2="12" y2="18.01"></line><line x1="8" y1="18" x2="8" y2="18.01"></line></svg>
+            </button>
+            <div class="calc-panel hidden" id="calc-panel">
+                <div class="calc-display" id="calc-display">0</div>
+                <div class="calc-keys">
+                    <button class="calc-btn op" data-action="clear">C</button>
+                    <button class="calc-btn op" data-action="delete">DEL</button>
+                    <button class="calc-btn op" data-action="percent">%</button>
+                    <button class="calc-btn op calc-action" data-action="divide">/</button>
+
+                    <button class="calc-btn" data-value="7">7</button>
+                    <button class="calc-btn" data-value="8">8</button>
+                    <button class="calc-btn" data-value="9">9</button>
+                    <button class="calc-btn op calc-action" data-action="multiply">x</button>
+
+                    <button class="calc-btn" data-value="4">4</button>
+                    <button class="calc-btn" data-value="5">5</button>
+                    <button class="calc-btn" data-value="6">6</button>
+                    <button class="calc-btn op calc-action" data-action="subtract">-</button>
+
+                    <button class="calc-btn" data-value="1">1</button>
+                    <button class="calc-btn" data-value="2">2</button>
+                    <button class="calc-btn" data-value="3">3</button>
+                    <button class="calc-btn op calc-action" data-action="add">+</button>
+
+                    <button class="calc-btn" data-value="0" style="grid-column: span 2;">0</button>
+                    <button class="calc-btn" data-value=".">.</button>
+                    <button class="calc-btn calc-equals" data-action="calculate">=</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
